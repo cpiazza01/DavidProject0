@@ -1,4 +1,4 @@
-import scala.io.Source
+
   
 
 
@@ -9,12 +9,15 @@ import scala.io.Source
       organization := "com.example",
       scalaVersion := "2.13.3"
     )),
-    name := "scalatest-example"
+    
 
   )
 
   
   
-  libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6"
-  
-
+val circeVersion = "0.12.3"
+libraryDependencies ++= Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)
