@@ -1,7 +1,7 @@
 package Monster
 import io.circe.parser
 import io.circe.generic.auto._
-import ApiCaller._
+import DAndDApiCaller._
 import io.circe.HCursor
 import java.awt.Desktop.Action
 import io.circe.Decoder
@@ -28,12 +28,12 @@ case class LegendaryActions(name:String,desc:String,damage:Damage)
 object MonsterAPICaller {
     def callDAndDMonsterApi(): String= {
     val url = "https://www.dnd5eapi.co/api/monsters"//[additionaly can add /index number for monster]
-    val apiInf = scala.io.Source.fromURL(url).mkString.stripMargin
-    println(apiInf)
-    apiInf
+    val monsterApiInf = scala.io.Source.fromURL(url).mkString.stripMargin
+    println(monsterApiInf)
+    monsterApiInf
     }
 
-    def decodeJsonToMonsterObject(apiInfo: String) {
+    def decodeJsonToMonsterObject(monsterApiInfo: String) {
       implicit val MonsterDecoder: Decoder[Monster] =
         (hCursor: HCursor) => {
           for {
@@ -68,13 +68,10 @@ object MonsterAPICaller {
           } yield Monster(index,name,size,typeOf,subType,alignment,armorClass,hitPoints,hitDice,speed,    strength,dexterity,constitution,intelligence,wisdom,charisma,proficiencies,damageVulnerabilities,damageResistences,damageImmunities,conditionImmunities,senses,languages,challengeRating,specialAbilities,actions,legendaryActions,url)
         }
       
-          val decodingResult = parser.decode[List[Monster]](apiInfo)
+          val decodingResult = parser.decode[List[Monster]](monsterApiInfo)
       decodingResult match {
         case Right(monsters) => 
           monsters.map(println)
-          val writer = new PrintWriter("monsters.json")
-          writer.print(monsters)
-          writer.close()
         case Left(error) => println(error.getMessage())
       }
     }
